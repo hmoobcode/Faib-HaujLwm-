@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="hmn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#123d35">
+<title>Faib Hauj Lwm</title>
+
+<style>
+:root {
+  --green: #123d35;
+  --green2: #176b55;
+  --gold: #e7bd69;
+  --bg: #f1f5f2;
+  --white: #ffffff;
+  --text: #20352f;
+  --muted: #718078;
+  --border: #dce6df;
+  --shadow: 0 8px 24px rgba(18,61,53,.09);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Sans", "Phetsarath OT", Arial, sans-serif;
+  font-weight: 700;
+}
+button, input { font: inherit; font-weight: 700; }
+button { cursor: pointer; }
+header {
+  background: linear-gradient(135deg,#123d35,#123d35);
+  color: white;
+  padding: 22px 18px 28px;
+  border-radius: 0 0 25px 25px;
+  box-shadow: var(--shadow);
+}
+.header-top {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.logo {
+  width:48px;height:48px;border-radius:15px;
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.22);
+  display:grid;place-items:center;font-size:26px;
+}
+header h1 {font-size:21px;margin:0 0 5px;font-weight: bold;}
+header p {font-size:14px;color:#d7e8df;margin:0;font-weight: bold;}
+main {max-width:850px;margin:auto;padding:18px 13px 35px}
+.view {display:none}
+.view.active {display:block}
+.section-title {font-size:19px;font-weight:800;margin:7px 0 14px}
+.menu-card {
+  width:100%;text-align:left;border:1px solid var(--border);
+  background:white;border-radius:18px;padding:19px;margin-bottom:13px;
+  display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);
+  color:var(--text);transition:.15s;font-weight: bold;
+}
+.menu-card:active {transform:scale(.98)}
+.menu-icon {
+  flex-shrink:0;width:49px;height:49px;border-radius:15px;
+  display:grid;place-items:center;font-size:23px;
+  background:#e6f3eb;color:var(--green);
+}
+.menu-card strong {display:block;font-size:17px;font-weight: bold;}
+.menu-card small {display:block;margin-top:5px;color:var(--muted);font-size:14px;font-weight: bold;}
+.arrow {margin-left:auto;color:var(--green);font-size:24px;font-weight: bold;}
+.panel {
+  background:white;border:1px solid var(--border);
+  border-radius:18px;padding:15px;margin-bottom:15px;
+  box-shadow:var(--shadow);
+}
+.toolbar {display:flex;align-items:center;gap:9px;margin-bottom:14px}
+.back-btn {
+  width:39px;height:39px;border-radius:12px;border:1px solid var(--border);
+  background:white;color:var(--green);font-size:21px;flex-shrink:0;font-weight: bold;
+}
+.toolbar h2 {font-size:18px;margin:0;font-weight: bold;}
+.toolbar small {font-size:13px;color:var(--muted);font-weight: bold;}
+.brand-title {
+  background:linear-gradient(135deg,#123d35,#23785d);
+  border-radius:16px;color:white;text-align:center;padding:18px 10px;
+  margin-bottom:14px;font-weight: bold;
+}
+.brand-title .ornament {color:var(--gold);font-size:19px;font-weight: bold;}
+.brand-title h2 {font-size:22px;line-height:1.5;margin:5px 0;font-weight: bold;}
+.brand-title p {font-size:13px;color:#d8e9e0;margin:0;font-weight: bold;}
+.field-label {font-size:14px;font-weight:800;display:block;margin-bottom:7px}
+.date-input {
+  width:100%;padding:14px;border:1px solid var(--border);
+  border-radius:11px;background:#f9fbf9;outline:none;font-size:15px;font-weight: bold;
+}
+.date-input:focus,.task-input:focus {
+  border-color:var(--green2);box-shadow:0 0 0 3px #176b5514;
+}
+.table-heading {
+  font-size:15px;font-weight:800;margin:19px 0 10px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.table-heading span {font-size:13px;color:var(--muted);font-weight: bold;}
+.task-list {display:flex;flex-direction:column;gap:8px}
+.task-row {
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+  gap:8px;align-items:stretch;
+}
+.task-name {
+  display:flex;align-items:center;gap:7px;
+  background:#f2f7f3;border:1px solid #e4ece5;border-radius:10px;
+  padding:9px 7px;min-width:0;font-weight: bold;
+}
+.task-number {
+  flex-shrink:0;width:27px;height:27px;border-radius:8px;
+  background:var(--green);color:white;display:grid;place-items:center;
+  font-size:13px;font-weight:800;
+}
+.task-label {font-size:13px;font-weight:800;line-height:1.5;overflow-wrap:anywhere}
+.task-input {
+  width:100%;min-width:0;border:1px solid var(--border);
+  background:white;border-radius:10px;padding:12px 10px;
+  outline:none;font-size:14px;color:var(--text);font-weight: bold;
+}
+.task-input::placeholder {color:#a2afa7;font-weight: bold;}
+.actions {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;margin-top:17px;
+}
+.action-btn {
+  border:0;border-radius:12px;padding:14px 5px;
+  font-size:14px;font-weight:800;display:flex;
+  align-items:center;justify-content:center;gap:5px;
+}
+.save-btn {background:var(--green);color:white}
+.photo-btn {background:#e3f1e7;color:var(--green)}
+.docx-btn {background:#fff0d6;color:#78500b}
+.action-btn:disabled {opacity:.5;cursor:wait}
+.note {font-size:13px;color:var(--muted);line-height:1.7;margin:12px 2px 0;font-weight: bold;}
+.list-card {
+  background:white;border:1px solid var(--border);border-radius:14px;
+  padding:14px;margin-bottom:10px;display:flex;gap:10px;
+  align-items:center;box-shadow:0 3px 12px #123d3508;font-weight: bold;
+}
+.list-date {
+  width:43px;height:43px;border-radius:12px;background:#e6f3eb;
+  display:grid;place-items:center;font-size:19px;flex-shrink:0;
+}
+.list-info {min-width:0;flex:1}
+.list-info strong {display:block;font-size:16px;overflow-wrap:anywhere;font-weight: bold;}
+.list-info small {color:var(--muted);font-size:13px;font-weight: bold;}
+.list-open {
+  border:0;background:#e7f1e9;color:var(--green);
+  border-radius:9px;padding:10px;font-weight:800;font-size:13px;
+}
+.delete-btn {
+  border:0;background:#fff0ef;color:#b43a34;border-radius:9px;
+  padding:10px;font-size:14px;font-weight: bold;
+}
+.empty {
+  text-align:center;padding:35px 15px;color:var(--muted);
+  background:white;border-radius:16px;border:1px dashed var(--border);
+  font-size:15px;line-height:2;font-weight: bold;
+}
+footer {text-align:center;color:#8b9991;font-size:12px;padding:12px;font-weight: bold;}
+.toast {
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:#183c32;color:white;padding:14px 19px;border-radius:12px;
+  box-shadow:var(--shadow);font-size:14px;font-weight:800;z-index:50;
+  width:max-content;max-width:90%;display:none;text-align:center;
+}
+@media(min-width:600px) {
+  main {padding:24px}
+  .panel {padding:22px}
+  .task-label {font-size:15px}
+  .task-input {font-size:15px}
+}
+@media(max-width:350px) {
+  .task-row {grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:5px}
+  .task-name {padding:7px 4px;gap:4px}
+  .task-number {width:24px;height:24px}
+  .task-label {font-size:12px}
+  .task-input {font-size:13px;padding:9px 5px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-top">
+      <div style="margin-left: 40px;"></div>
+      <h1>Daim Ntawv Faib Hauj Lwm</h1>
+    </div>
+</header>
+
+<main>
+
+<section id="home" class="view active">
+  <button class="menu-card" onclick="go('editor')">
+    <div class="menu-icon">📝</div>
+    <div>
+      <strong>Phiaj Xwm Faib Hauj Lwm</strong>
+    </div>
+    <span class="arrow">›</span>
+  </button>
+
+  <button class="menu-card" onclick="go('records')">
+    <div class="menu-icon">📚</div>
+    <div>
+      <strong>Txheeb Npe Raug HaujLwm</strong>
+    </div>
+    <span class="arrow">›</span>
+  </button>
+</section>
+
+<section id="editor" class="view">
+
+    <label class="field-label" for="workDate">
+      <div style="margin-left: 90px;"><h2>Hnub, hli, xyoo</h2></div>
+    </label>
+    <input id="workDate" class="date-input"
+      type="text" placeholder="Yuav tsum sau ......./......./......."
+      autocomplete="off">
+
+    <div class="table-heading" style="display: flex; justify-content: space-between;">
+      <div style="margin-left: 60px;">Tes Num</div>
+      <div style="margin-right: 60px;">Kos Npe</div>
+    </div>
+
+    <div id="taskList" class="task-list"></div>
+
+    <div class="actions">
+      <button class="action-btn save-btn" onclick="saveRecord()">
+        <span>💾</span> Save
+      </button>
+      <button class="action-btn photo-btn" onclick="exportPhoto()">
+        <span>🖼</span> Photos
+      </button>
+      <button class="action-btn docx-btn" onclick="exportDocx()">
+        <span>📄</span> Docx
+      </button>
+    </div>
+
+    <p class="note">
+      Nco ntsoov nias Save ua ntej tawm hauv daim ntawv.
+      Cov ntaub ntawv khaws cia hauv lub xov tooj no.
+    </p>
+</section>
+
+<section id="records" class="view">
+  <div id="recordList"></div>
+</section>
+
+</main>
+<div id="toast" class="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+
+<script>
+"use strict";
+
+const TASKS = [
+  "Qhia Sawv Ntxov",
+  "Nkauj Npaj Siab",
+  "Txais Tos Qhua",
+  "Coj Lais Kas",
+  "Thov Vajtswv",
+  "Vaj Lug Kub Ua ke",
+  "Vaj Lug Kub Sib Quas",
+  "Nkauj TshwjXeeb",
+  "Nqa Hnab",
+  "Qhuab Qhia",
+  "Siv Yas Suab",
+  "SaibXyuas Khoom Siv",
+  "Tu Tuam Tsev",
+  "Saib Menyuam Yaus",
+  "Qhia Cov Niam Tsev",
+  "Tshaj Tawm Faib Hauj Lwm"
+];
+
+const STORAGE_KEY = "faib_hauj_lwm_records_v1";
+let currentId = null;
+let currentView = "home";
+let toastTimer = null;
+
+function showToast(message) {
+  const el = document.getElementById("toast");
+  el.textContent = message;
+  el.style.display = "block";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.style.display = "none", 2800);
+}
+
+function getRecords() {
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return Array.isArray(data) ? data : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function putRecords(records) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    return true;
+  } catch (e) {
+    showToast("Tsis muaj chaw txaus. Thov tso chaw hauv xov tooj.");
+    return false;
+  }
+}
+
+function makeTaskRows() {
+  const container = document.getElementById("taskList");
+  container.innerHTML = "";
+
+  TASKS.forEach((task, index) => {
+    const row = document.createElement("div");
+    row.className = "task-row";
+
+    const name = document.createElement("div");
+    name.className = "task-name";
+
+    const number = document.createElement("span");
+    number.className = "task-number";
+    number.textContent = index + 1;
+
+    const label = document.createElement("span");
+    label.className = "task-label";
+    label.textContent = task;
+
+    name.append(number, label);
+
+    const input = document.createElement("input");
+    input.className = "task-input";
+    input.type = "text";
+    input.id = "task-" + index;
+    input.placeholder = "Sau npe...";
+    input.autocomplete = "off";
+    input.setAttribute("aria-label", task);
+
+    row.append(name, input);
+    container.appendChild(row);
+  });
+}
+
+function go(view) {
+  document.querySelectorAll(".view").forEach(section => {
+    section.classList.remove("active");
+  });
+
+  const target = document.getElementById(view);
+  if (!target) return;
+
+  target.classList.add("active");
+  currentView = view;
+
+  if (view === "records") renderRecords();
+
+  window.scrollTo({ top: 0, behavior: "auto" });
+
+  if (history.state?.view !== view) {
+    history.pushState({ view }, "", "#" + view);
+  }
+}
+
+function clearEditor() {
+  currentId = null;
+  document.getElementById("workDate").value = "";
+  TASKS.forEach((_, i) => {
+    document.getElementById("task-" + i).value = "";
+  });
+}
+
+function readEditor() {
+  return {
+    date: document.getElementById("workDate").value.trim(),
+    tasks: TASKS.map((_, i) =>
+      document.getElementById("task-" + i).value.trim()
+    )
+  };
+}
+
+function saveRecord() {
+  const data = readEditor();
+
+  if (!data.date) {
+    showToast("Yuav tsum sau hnub tim tso");
+    document.getElementById("workDate").focus();
+    return;
+  }
+
+  const records = getRecords();
+  let id = currentId;
+
+  if (id) {
+    const index = records.findIndex(r => r.id === id);
+    if (index >= 0) {
+      records[index] = { ...records[index], ...data, updatedAt: Date.now() };
+    } else {
+      id = null;
+    }
+  }
+
+  if (!id) {
+    id = String(Date.now()) + "-" + Math.random().toString(36).slice(2, 7);
+    records.unshift({
+      id,
+      ...data,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    });
+  }
+
+  if (putRecords(records)) {
+    currentId = id;
+    showToast("Khaws tseg lawm!");
+  }
+}
+
+function renderRecords() {
+  const container = document.getElementById("recordList");
+  const records = getRecords();
+  container.innerHTML = "";
+
+  if (!records.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.innerHTML =
+      "<br><strong>Tsis muaj ntaub ntawv sau cia</strong><br>";
+    container.appendChild(empty);
+    return;
+  }
+
+  records.forEach(record => {
+    const row = document.createElement("div");
+    row.className = "list-card";
+
+    const icon = document.createElement("div");
+    icon.className = "list-date";
+    icon.textContent = "📋";
+
+    const info = document.createElement("div");
+    info.className = "list-info";
+
+    const title = document.createElement("strong");
+    title.textContent = record.date || "(Tsis muaj hnub tim)";
+
+    const detail = document.createElement("small");
+
+    info.append(title, detail);
+
+    const open = document.createElement("button");
+    open.className = "list-open";
+    open.textContent = "Nias Qhib Saib";
+    open.onclick = () => openRecord(record.id);
+
+    const del = document.createElement("button");
+    del.className = "delete-btn";
+    del.textContent = "🗑️";
+    del.setAttribute("aria-label", "Delete record");
+    del.onclick = () => deleteRecord(record.id);
+
+    row.append(icon, info, open, del);
+    container.appendChild(row);
+  });
+}
+
+function openRecord(id) {
+  const record = getRecords().find(r => r.id === id);
+  if (!record) return;
+
+  currentId = record.id;
+  document.getElementById("workDate").value = record.date || "";
+
+  TASKS.forEach((_, i) => {
+    document.getElementById("task-" + i).value =
+      (record.tasks || [])[i] || "";
+  });
+
+  go("editor");
+}
+
+function deleteRecord(id) {
+  if (!confirm("Koj puas xav rho daim ntawv no tawm?")) return;
+
+  const records = getRecords().filter(r => r.id !== id);
+  if (putRecords(records)) {
+    if (currentId === id) currentId = null;
+    renderRecords();
+    showToast("Rho tawm lawm.");
+  }
+}
+
+history.replaceState({ view: "home" }, "", "#home");
+
+window.addEventListener("popstate", event => {
+  const view = event.state?.view || "home";
+  document.querySelectorAll(".view").forEach(section => {
+    section.classList.remove("active");
+  });
+
+  const target = document.getElementById(view);
+  if (target) {
+    target.classList.add("active");
+    currentView = view;
+    if (view === "records") renderRecords();
+  }
+});
+
+function safeFilename(value) {
+  return (value || "Faib_Hauj_Lwm")
+    .replace(/[\\/:*?"<>|]/g, "-")
+    .replace(/\s+/g, "_")
+    .slice(0, 90);
+}
+
+async function exportPhoto() {
+  const data = readEditor();
+
+  if (!data.date) {
+    showToast("Yuav tsum sau hnub tim tso");
+    document.getElementById("workDate").focus(); return;
+  }
+
+  const btn = document.querySelector(".photo-btn");
+  btn.disabled = true;
+
+  try {
+    const canvas = document.createElement("canvas");
+    canvas.width = 900;
+    canvas.height = 1800;
+
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const green = "#123d35";
+    const margin = 44;
+    const tableWidth = canvas.width - margin * 2;
+    const nameWidth = 390;
+    const valueWidth = tableWidth - nameWidth;
+    const top = 45;
+
+    ctx.fillStyle = green;
+    ctx.fillRect(margin, top, tableWidth, 155);
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 36px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("Faib Hauj Lwm", canvas.width / 2, top + 80);
+
+    ctx.font = "bold 24px Arial";
+    ctx.fillText("Hnub Tim: " + data.date, canvas.width / 2, top + 127);
+
+    const tableTop = top + 175;
+    const availableHeight = canvas.height - tableTop - 65;
+    const rowHeight = availableHeight / TASKS.length;
+
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+
+    TASKS.forEach((task, i) => {
+      const y = tableTop + i * rowHeight;
+      ctx.fillStyle = i % 2 === 0 ? "#f0f6f1" : "#ffffff";
+      ctx.fillRect(margin, y, tableWidth, rowHeight);
+
+      ctx.strokeStyle = "#ccdcd0";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(margin, y, tableWidth, rowHeight);
+
+      ctx.beginPath();
+      ctx.moveTo(margin + nameWidth, y);
+      ctx.lineTo(margin + nameWidth, y + rowHeight);
+      ctx.stroke();
+
+      ctx.fillStyle = green;
+      ctx.font = "bold 22px Arial";
+      ctx.fillText(String(i + 1).padStart(2, "0"), margin + 10, y + rowHeight / 2);
+
+      ctx.font = "bold 21px Arial";
+      ctx.fillText(task, margin + 48, y + rowHeight / 2);
+
+      ctx.fillStyle = "#243c32";
+      ctx.font = "bold 21px Arial";
+      const value = data.tasks[i] || "";
+      const maxWidth = valueWidth - 18;
+      let shown = value;
+
+      while (shown && ctx.measureText(shown).width > maxWidth) {
+        shown = shown.slice(0, -1);
+      }
+
+      if (shown !== value && shown.length > 1) {
+        shown = shown.slice(0, -1) + "…";
+      }
+
+      ctx.fillText(shown, margin + nameWidth + 9, y + rowHeight / 2);
+    });
+
+    ctx.fillStyle = green;
+    ctx.textAlign = "center";
+    ctx.font = "bold 19px Arial";
+    ctx.fillText("Faib Hauj Lwm Hnub So", canvas.width / 2, canvas.height - 27);
+
+    const blob = await new Promise(resolve =>
+      canvas.toBlob(resolve, "image/png")
+    );
+
+    if (!blob) throw new Error("Image creation failed");
+
+    const filename = safeFilename(data.date) + ".png";
+    const file = new File([blob], filename, { type: "image/png" });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          title: 'Faib Hauj Lwm',
+          text: 'Daim ntawv faib hauj lwm hnub tim: ' + data.date,
+          files: [file]
+        });
+        showToast("Faib duab tiav lawm!");
+        return;
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.log("Share skipped, downloading instead.");
+        } else {
+          return;
+        }
+      }
+    }
+
+    downloadBlob(blob, filename);
+
+  } catch (err) {
+    console.error(err);
+    showToast("Tsim daim duab tsis tiav. Thov sim dua.");
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 3000);
+  showToast("Rub duab rau hauv xov tooj lawm!");
+}
+
+async function exportDocx() {
+  const data = readEditor();
+
+  if (!data.date) {
+    showToast(" Yuav tsum sau hnub tim tso");
+    document.getElementById("workDate").focus();
+    return;
+  }
+
+  const btn = document.querySelector(".docx-btn");
+  btn.disabled = true;
+
+  try {
+    if (!window.docx || !window.saveAs) {
+      throw new Error("DOCX library not loaded");
+    }
+
+    const {
+      Document, Packer, Paragraph, TextRun, Table, TableRow,
+      TableCell, WidthType, AlignmentType, BorderStyle,
+      ShadingType, VerticalAlign, PageOrientation
+    } = window.docx;
+
+    const pageWidth = 5102;
+    const pageHeight = 10205;
+    const margin = 240;
+    const contentWidth = pageWidth - margin * 2;
+    const borders = {
+      top: { style: BorderStyle.SINGLE, size: 4, color: "CBD9CE" },
+      bottom: { style: BorderStyle.SINGLE, size: 4, color: "CBD9CE" },
+      left: { style: BorderStyle.SINGLE, size: 4, color: "CBD9CE" },
+      right: { style: BorderStyle.SINGLE, size: 4, color: "CBD9CE" }
+    };
+
+    const centeredTitle = new Paragraph({
+      alignment: AlignmentType.CENTER,
+      spacing: { after: 100 },
+      children: [
+        new TextRun({
+          text: "Faib Hauj Lwm Hnub So",
+          bold: true, size: 28, color: "123D35"
+        })
+      ]
+    });
+
+    const dateParagraph = new Paragraph({
+      alignment: AlignmentType.CENTER,
+      spacing: { after: 130 },
+      children: [
+        new TextRun({ text: "Hnub Tim " + data.date, bold: true, size: 26 })
+      ]
+    });
+
+    const rows = TASKS.map((task, i) => {
+      const left = new TableCell({
+        width: { size: 2350, type: WidthType.DXA },
+        borders,
+        margins: { top: 45, bottom: 45, left: 65, right: 45 },
+        verticalAlign: VerticalAlign.CENTER,
+        shading: {
+          type: ShadingType.CLEAR,
+          fill: i % 2 === 0 ? "F0F6F1" : "FFFFFF"
+        },
+        children: [
+          new Paragraph({
+            spacing: { before: 0, after: 0 },
+            children: [
+              new TextRun({
+                text: (i + 1) + ". " + task,
+                size: 20,
+                bold: true,
+                color: "123D35"
+              })
+            ]
+          })
+        ]
+      });
+
+      const right = new TableCell({
+        width: { size: contentWidth - 2350, type: WidthType.DXA },
+        borders,
+        margins: { top: 45, bottom: 45, left: 65, right: 45 },
+        verticalAlign: VerticalAlign.CENTER,
+        shading: {
+          type: ShadingType.CLEAR,
+          fill: i % 2 === 0 ? "F0F6F1" : "FFFFFF"
+        },
+        children: [
+          new Paragraph({
+            spacing: { before: 0, after: 0 },
+            children: [
+              new TextRun({
+                text: data.tasks[i] || " ",
+                size: 20,
+                bold: true,
+                color: "20352F"
+              })
+            ]
+          })
+        ]
+      });
+
+      return new TableRow({ children: [left, right] });
+    });
+
+    const table = new Table({
+      width: { size: contentWidth, type: WidthType.DXA },
+      columnWidths: [2350, contentWidth - 2350],
+      rows,
+      borders
+    });
+
+    const doc = new Document({
+      sections: [{
+        properties: {
+          page: {
+            size: {
+              width: pageWidth,
+              height: pageHeight,
+              orientation: PageOrientation.PORTRAIT
+            },
+            margin: {
+              top: margin,
+              bottom: margin,
+              left: margin,
+              right: margin
+            }
+          }
+        },
+        children: [centeredTitle, dateParagraph, table]
+      }]
+    });
+
+    const blob = await Packer.toBlob(doc);
+    const filename = safeFilename(data.date) + ".docx";
+    const file = new File([blob], filename, { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          title: 'Faib Hauj Lwm (Word)',
+          text: 'Daim ntawv Word faib hauj lwm hnub tim: ' + data.date,
+          files: [file]
+        });
+        showToast("Faib ntaub ntawv DOCX tiav lawm!");
+        return;
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.log("Share skipped, downloading instead.");
+        } else {
+          return;
+        }
+      }
+    }
+
+    saveAs(blob, filename);
+    showToast("Tsim ntaub ntawv DOCX tiav lawm.");
+  } catch (err) {
+    console.error(err);
+    showToast("DOCX tsis tiav. Xyuas Internet thiab sim dua.");
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+makeTaskRows();
+</script>
+
+</body>
+</html>
